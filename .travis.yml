@@ -1,0 +1,36 @@
+language: python
+sudo: required
+dist: xenial
+python: '3.7'
+env:
+  global:
+  - PYTHONPATH=$TRAVIS_BUILD_DIR:$PYTHONPATH
+  - LAMBDA_FUNCTION_NAME=flask-api-proxy-example
+  - LAMBDA_RUNTIME=python3.7
+  - LAMBDA_ROLE=arn:aws:iam::611162374248:role/service-role/datalync-lambda-service
+  - LAMBDA_FUNCTION_CODE_ZIP=dist/flask-api-proxy-example.zip
+  - LAMBDA_FUNCTION_HANDLER=lambda_function.lambda_handler
+  - AWS_DEFAULT_REGION=us-east-1
+  - secure: KNgxNxmlOWTAwN+BBnl0P4ga2ltsJA0gwBRmPLGSBL3W6X3Z6iVd6DQSLRnE7q/GWcF/IHeQuezZ0sk80sp57DgL9Y5Pv1oWc+Kmn4m1LrZzsZ4aRMkYH5VjPFwtyerBWpuX2NOQ8zmTwWlUweKclWM/dowrAz0aaptRG7W/fJciMku/rYXn5S+LUmLvdx+PVS1MCf+mWl62aqm94/mmgOQFM0r1YtJJRCkjtqRDsGjv/JhLLymhU0wsOiJpKCnzkVp3T6pN0PB0rVxXqlOeWPXkodJmHKJ0TM8ZduyiVASeAnKVBKt0AEg/Wnn/EeoE/uBVlSbr6ETveEyZJYwAhHo73b9omq08JQO61h/MqkZ4WX0y2WP/oqNDaaFmx70LUhHBftReZPjCMgodswPRzqUHUfOuZ4bsWOHBuKfBZNk+sgYzqe5YaC9+CJHsFy4Es7vj2EEtgKBHJm+kaYZJeGwGc+jnS8uqd5JIXPvTZcoN6wCpLV9vv7z55rkc6WEY7KkoNTWEqBCpGx4zlAART57MnQG8CJg2LFRfs9LUW4MIcdO1ooDnulz/6NU0jgJSsGsR440FElXyjfRJgEwfZ7dDHjqwuyCxfs4QFcFAGtr9RqdIyCyeHe3yWOt8HdZqExAEmvi6Y5h7gW2q0UMFRQBqMaHk7c9g9xOOiYtr1k8=
+  - secure: oPe6vemonDJMTUY+dJLKP1wUfpNefJeC0nNhUQJ7DdJfaQ80cRqGgOSXvvTHCx8uTaq1qp4FiQ00j5Un3bauqjO6SJQRdgXWfadssgvWMiJ5UWWeVHWSLNHYf+RDmv9XJwB+7jlv9zpbpKqmqSTQchCemb7PWm4iN8QO9wPEIfHE/xpa7toz0ZmAdffaGfl6NZSgsKNCWJEzF34OAbkJJwBdueduConLGFzFJQQjEZbWjaoY53dbyvt7YB7N2Eg03qeqzwj5XsfOrTHevEdT88XvJ42Q7/Qz2GTUUSvT2pqnavEPl5s4yBpVZHHZSOByIqEyX7GxxXjvbIozq8JfMV7sqEkPRKya9AVFVnrSMu0NzW7/NnUaPgzbgvYnJow6Ozyrj2V0JW+e4KWS3LlDwq7C9KYYl0QvwCbvc0KVup5XHi+rrVmxyftjqi49srY4q7DVssN5DGw0ikIwHjH4a1JhwKBJSxXseH90I9Yzcl1LAXSipWERz4G77TT+jznUbXOS2sSFoGtr2Z6Q/4zv2SOVcpYxAHwkaxTjnjOSD+BSyothWKGoDl/BN+c4MkZkfmDV/R1eAJIDOTpE9roqAhPInUS1f2bm/UQGldZ++ygZD2vH9I/S2FMGDblvN/z62e3QEJ5mGZJUl57a8rpf0cyCPwyRWhLkWI32UebbIq4=
+install:
+- pip install --requirement requirements.txt
+script:
+- ls
+before_deploy:
+- mkdir build
+- pip install --requirement requirements.txt --target build
+- cp lambda_function.py build/
+- mkdir dist
+- cd build && zip -r ../dist/flask-api-proxy-example.zip .
+- cd ..
+deploy:
+- provider: script
+  skip_cleanup: true
+  script: python scripts/setup_lambda.py --function-name=$LAMBDA_FUNCTION_NAME --lambda_alias=dev
+    --environment=dev --publish-lambda=true --function-handler=$LAMBDA_FUNCTION_HANDLER
+    --function-zip-file=$LAMBDA_FUNCTION_CODE_ZIP --lambda-role=$LAMBDA_ROLE --lambda-runtime=$LAMBDA_RUNTIME
+    --s3-build-artifacts-bucket=datalync-test-bucket
+  on:
+    repo: vamshirapolu/flask-api-proxy-example
+    branch: develop
