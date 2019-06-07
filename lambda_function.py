@@ -16,4 +16,5 @@ def greetings(user):
     return jsonify(status=200, message='Hello {}!'.format(user))
 
 def lambda_handler(event, context):
+    print(event)
     return awsgi.response(app, event, context)
