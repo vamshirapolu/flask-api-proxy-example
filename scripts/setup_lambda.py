@@ -31,7 +31,6 @@ lambda_description = 'Data ETL Stream (Build:{build}, Commit:{commit})'.format(
     build=os.environ['TRAVIS_BUILD_NUMBER'], commit=os.environ['TRAVIS_COMMIT'])
 lambda_function_zip_file = args.function_zip_file
 lambda_runtime = args.lambda_runtime
-kinesis_data_stream = args.kinesis_data_stream
 
 # retuens the lambda function zip bytes
 def get_lambda_function_bytes(function_zip):
@@ -72,14 +71,6 @@ try:
         Role=lambda_role,
         Handler=lambda_handler,
         Description=lambda_description,
-        Environment={
-            'Variables': {
-                'environment': environment_name,
-                'ingestion_version': os.environ['TRAVIS_COMMIT'],
-                'build_number': os.environ['TRAVIS_BUILD_NUMBER'],
-                'kinesis_data_stream': kinesis_data_stream
-            }
-        },
         Runtime=lambda_runtime
     )
     print("Updated configuration of function: {function_name}.".format(function_name=response.get('FunctionName')))
