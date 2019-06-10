@@ -30,7 +30,10 @@ def index():
 def show(path=None):
     print('path: {}'.format(path))
     if not path or path == 'index.html':
-        return render_template('index.template.html', **fields)
+        return render_template(os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            'docs/templates/index.template.html'
+        ), **fields)
     else:
         print('Rendering {} from directory {}.'.format(path, os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')))
         return send_from_directory(
