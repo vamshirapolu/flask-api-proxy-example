@@ -21,7 +21,7 @@ before_deploy:
 - mkdir build
 - pip install --requirement requirements.txt --target build
 - cp lambda_function.py build/
-- cp -a /docs build/docs
+- cp -a ./docs ./build/docs
 - mkdir dist
 - cd build && zip -r ../dist/flask-api-proxy-example.zip .
 - cd ..
