@@ -26,16 +26,17 @@ def index():
 @app.route('/docs')
 @app.route('/docs/<path:path>')
 def show(path=None):
-        if not path or path == 'index.html':
-            return render_template('index.template.html', **fields)
-        else:
-            return send_from_directory(
-                os.path.join(
-                    base_path,
-                    '/docs'
-                ),
-                path
-            )
+    print('path: {}'.format(path))
+    if not path or path == 'index.html':
+        return render_template('index.template.html', **fields)
+    else:
+        return send_from_directory(
+            os.path.join(
+                base_path,
+                '/docs'
+            ),
+            path
+        )
 
 @app.route('/greet/<path:user>', methods=['GET'])
 def greetings(user):    
