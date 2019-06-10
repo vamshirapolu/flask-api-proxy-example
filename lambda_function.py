@@ -7,16 +7,18 @@ from flask import (
 
 app = Flask(__name__)
 
-@app.route('/', method='GET')
+
+@app.route('/', methods=['GET'])
 def index():
     return jsonify(status=200, message='OK')
 
 
-@app.route('/greet/<path:user>', method='GET')
+@app.route('/greet/<path:user>', methods=['GET'])
 def greetings(user):    
     return jsonify(status=200, message='Hello {}!'.format(user))
 
-@app.route('/greet', method='GET')
+
+@app.route('/greetuser', methods=['GET'])
 def greetingsByRequestParam():
     print(request.args)
     user = request.args.get('user')
