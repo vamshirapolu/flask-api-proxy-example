@@ -1,3 +1,4 @@
 aws-wsgi==0.0.8
-flask==1.0.2
+flask==1.0.3
 boto3==1.9.160
+flask-restplus==0.12.1

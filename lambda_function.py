@@ -2,23 +2,29 @@ import awsgi
 from flask import (
     Flask,
     jsonify, 
-    request
+    request,
+    Blueprint
 )
+from flask_restplus import Api
+
 
 app = Flask(__name__)
+blueprint = Blueprint('api', __name__, url_prefix='/')
+api = Api(blueprint, doc='/api-doc/')
 
+app.register_blueprint(blueprint)
 
-@app.route('/', methods=['GET'])
+@api.route('/', methods=['GET'])
 def index():
     return jsonify(status=200, message='OK')
 
 
-@app.route('/greet/<path:user>', methods=['GET'])
+@api.route('/greet/<path:user>', endpoint='greet', methods=['GET'])
 def greetings(user):    
     return jsonify(status=200, message='Hello {}!'.format(user))
 
 
-@app.route('/greetuser', methods=['GET'])
+@api.route('/greetuser', endpoint='greet_user', methods=['GET'])
 def greetingsByRequestParam():
     print(request.args)
     user = request.args.get('user')
