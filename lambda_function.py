@@ -1,17 +1,40 @@
 import awsgi
-from flask import (
-    Flask,
-    jsonify, 
-    request
-)
-from flask_swagger import swagger
+from flask import (Flask, jsonify, Blueprint, send_from_directory, render_template, request)
+import json
+import os 
 
 app = Flask(__name__)
+
+fields = {
+    'base_url': 'docs',
+    'app_name': 'Realtime Ingestion API',
+    'config_json': json.dumps({
+        'app_name': 'Realtime Ingestion API',
+        'dom_id': '#realtime-ingestion-api',
+        'url': 'https://bmngw78kr4.execute-api.us-east-1.amazonaws.com/dev/docs/swagger.json',
+        'layout': 'StandaloneLayout'
+    })
+}
 
 @app.route('/', methods=['GET'])
 def index():
     return jsonify(status=200, message='OK')
 
+
+@swagger_ui.route('/docs')
+@swagger_ui.route('/docs/<path:path>')
+def show(path=None):
+        if not path or path == 'index.html':
+            return render_template('index.template.html', **fields)
+        else:
+            return send_from_directory(
+                # A bit of a hack to not pollute the default /static path with our files.
+                os.path.join(
+                    swagger_ui.root_path,
+                    swagger_ui._static_folder
+                ),
+                path
+            )
 
 @app.route('/greet/<path:user>', methods=['GET'])
 def greetings(user):    
@@ -35,3 +58,4 @@ def spec():
 def lambda_handler(event, context):
     print(event)
     return awsgi.response(app, event, context)
+

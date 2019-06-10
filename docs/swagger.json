@@ -1,0 +1,180 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.1",
+        "title": "Realtime Ingestion API",
+        "description": "API specificagion to ingest brand events in realtime"
+    },
+    "host": "b62fdsobo0.execute-api.us-east-1.amazonaws.com",
+    "basePath": "/dev",
+    "schemes": [
+        "https"
+    ],
+    "tags": [
+        {
+            "name": "users",
+            "description": "Accessed to brand users by authorized by API keys"
+        }
+    ],
+    "paths": {
+        "/ingest": {
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Used to validate and ingest events in real-time",
+                "operationId": "ingestEvents",
+                "description": "Validates and Ingests events into system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "inventoryItem",
+                        "description": "Inventory item to add",
+                        "schema": {
+                            "$ref": "#/definitions/Events"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "item created"
+                    },
+                    "400": {
+                        "description": "invalid input, object invalid"
+                    },
+                    "409": {
+                        "description": "an existing item already exists"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Events": {
+            "type": "object",
+            "required": [
+                "vendor_id",
+                "events"
+            ],
+            "properties": {
+                "vendor_id": {
+                    "type": "string"
+                },
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "user_id": {
+                                "type": "string"
+                            },
+                            "event_id": {
+                                "type": "string"
+                            },
+                            "tracker_version": {
+                                "type": "string"
+                            },
+                            "collection_version": {
+                                "type": "string"
+                            },
+                            "timestamp_utc": {
+                                "type": "string"
+                            },
+                            "action_verb": {
+                                "type": "string"
+                            },
+                            "action_object": {
+                                "type": "string"
+                            },
+                            "object_context": {
+                                "required": [
+                                    "classinstanceid",
+                                    "bike_number",
+                                    "facilityid",
+                                    "distance",
+                                    "calories",
+                                    "event_type",
+                                    "gear",
+                                    "rpm",
+                                    "speed",
+                                    "power",
+                                    "accupower",
+                                    "energy",
+                                    "device_number",
+                                    "accumulatedbeatcount",
+                                    "beattime",
+                                    "computedheartrate",
+                                    "accuspeed",
+                                    "accupowercalc"
+                                ],
+                                "properties": {
+                                    "classinstanceid": {
+                                        "type": "number"
+                                    },
+                                    "bike_number": {
+                                        "type": "number"
+                                    },
+                                    "facilityid": {
+                                        "type": "number"
+                                    },
+                                    "distance": {
+                                        "type": "number"
+                                    },
+                                    "calories": {
+                                        "type": "number"
+                                    },
+                                    "event_type": {
+                                        "type": "string"
+                                    },
+                                    "gear": {
+                                        "type": "number"
+                                    },
+                                    "rpm": {
+                                        "type": "number"
+                                    },
+                                    "speed": {
+                                        "type": "number"
+                                    },
+                                    "power": {
+                                        "type": "number"
+                                    },
+                                    "accupower": {
+                                        "type": "number"
+                                    },
+                                    "energy": {
+                                        "type": "number"
+                                    },
+                                    "device_number": {
+                                        "type": "number"
+                                    },
+                                    "accumulatedbeatcount": {
+                                        "type": "number"
+                                    },
+                                    "beattime": {
+                                        "type": "number"
+                                    },
+                                    "computedheartrate": {
+                                        "type": "number"
+                                    },
+                                    "accuspeed": {
+                                        "type": "number"
+                                    },
+                                    "accupowercalc": {
+                                        "type": "number"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
