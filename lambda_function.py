@@ -6,7 +6,7 @@ import os
 app = Flask(__name__, template_folder='docs/templates')
 
 fields = {
-    'base_url': 'docs',
+    'base_url': '',
     'app_name': 'Realtime Ingestion API',
     'config_json': json.dumps({
         'app_name': 'Realtime Ingestion API',
