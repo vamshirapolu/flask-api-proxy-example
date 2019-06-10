@@ -8,8 +8,6 @@ from flask_swagger import swagger
 
 app = Flask(__name__)
 
-app.run()
-
 @app.route('/', methods=['GET'])
 def index():
     return jsonify(status=200, message='OK')
