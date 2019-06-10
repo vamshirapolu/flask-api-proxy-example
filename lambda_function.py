@@ -30,6 +30,10 @@ def index():
 def show(path=None):
     print('path: {}'.format(path))
     if not path or path == 'index.html':
+        if not fields.get('config_json').get('oauth2RedirectUrl', None):
+            fields.get('config_json').update(
+                {"oauth2RedirectUrl": os.path.join(request.base_url, "oauth2-redirect.html")}
+            )
         return render_template('index.template.html', **fields)
     else:
         print('Rendering {} from directory {}.'.format(path, os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')))
