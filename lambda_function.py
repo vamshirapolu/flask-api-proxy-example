@@ -9,8 +9,8 @@ from flask_restplus import Api
 
 
 app = Flask(__name__)
-blueprint = Blueprint('api', __name__, url_prefix='/')
-api = Api(blueprint, doc='/api-doc/')
+blueprint = Blueprint('api', __name__, url_prefix='/api')
+api = Api(blueprint, doc='/doc/')
 
 app.register_blueprint(blueprint)
 
