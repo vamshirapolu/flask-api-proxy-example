@@ -16,6 +16,8 @@ fields = {
     })
 }
 
+base_path = os.path.dirname(os.path.abspath(__file__))
+
 @app.route('/', methods=['GET'])
 def index():
     return jsonify(status=200, message='OK')
@@ -28,10 +30,9 @@ def show(path=None):
             return render_template('index.template.html', **fields)
         else:
             return send_from_directory(
-                # A bit of a hack to not pollute the default /static path with our files.
                 os.path.join(
-                    swagger_ui.root_path,
-                    swagger_ui._static_folder
+                    base_path,
+                    '/docs'
                 ),
                 path
             )
