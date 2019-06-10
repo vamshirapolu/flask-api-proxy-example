@@ -17,6 +17,7 @@ fields = {
 }
 
 base_path = os.path.dirname(os.path.abspath(__file__))
+print('base_path {}'.format(base_path))
 
 @app.route('/', methods=['GET'])
 def index():
@@ -30,6 +31,7 @@ def show(path=None):
     if not path or path == 'index.html':
         return render_template('index.template.html', **fields)
     else:
+        print('Rendering {} from directory {}.'.format(path, os.path.join(base_path, '/docs')))
         return send_from_directory(
             os.path.join(
                 base_path,
