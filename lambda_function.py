@@ -10,7 +10,7 @@ fields = {
     'app_name': 'Realtime Ingestion API',
     'config_json': json.dumps({
         'app_name': 'Realtime Ingestion API',
-        'dom_id': '#realtime-ingestion-api',
+        'dom_id': '#swagger-ui',
         'url': 'https://bmngw78kr4.execute-api.us-east-1.amazonaws.com/dev/docs/swagger.json',
         'layout': 'StandaloneLayout'
     })
@@ -30,10 +30,6 @@ def index():
 def show(path=None):
     print('path: {}'.format(path))
     if not path or path == 'index.html':
-        if not fields.get('config_json').get('oauth2RedirectUrl', None):
-            fields.get('config_json').update(
-                {"oauth2RedirectUrl": os.path.join(request.base_url, "oauth2-redirect.html")}
-            )
         return render_template('index.template.html', **fields)
     else:
         print('Rendering {} from directory {}.'.format(path, os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')))
