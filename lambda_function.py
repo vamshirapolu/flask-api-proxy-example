@@ -23,8 +23,8 @@ def index():
     return jsonify(status=200, message='OK')
 
 
-@swagger_ui.route('/docs')
-@swagger_ui.route('/docs/<path:path>')
+@app.route('/docs')
+@app.route('/docs/<path:path>')
 def show(path=None):
         if not path or path == 'index.html':
             return render_template('index.template.html', **fields)
@@ -48,13 +48,6 @@ def greetingsByRequestParam():
     user = request.args.get('user')
     return jsonify(status=200, message='Hello {}!'.format(user))
 
-
-@app.route("/api-doc")
-def spec():
-    swag = swagger(app)
-    swag['info']['version'] = "1.0"
-    swag['info']['title'] = "My API"
-    return jsonify(swag)
 
 def lambda_handler(event, context):
     print(event)
